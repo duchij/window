@@ -27,30 +27,46 @@ void writePng(int center, int width, string fileName, bool ct)
 //	int max = center + width / 2;
 
 
-//	printf ("min: %d, max: %d \n", min, max);
+	printf ("min: %d, max: %d \n", min, max);
 
 	for (size_t y=0; y < image.get_height(); ++y){
 		for (size_t x=0; x < image.get_width(); ++x){
 
 			png::gray_pixel_16 pt = image.get_pixel(x,y);
 
+			//pt = pt >> 4;
+			//int16_t ptInt = pt >> 4;
+
 			if (ct == true){
 
-				int slope = -1024;
-				pt = pt + 1025;
-				pt = (png::gray_pixel_16)pt >> 4;
+				/*int slope = -1024;
+				pt = pt + slope;*/
+
 			}
 
-			if (pt <= min) {
+
+			//int a = (0xff000000 & pt) >> 4;
+		/*	int r = 0xff & pt.red;
+			int g = 0xff & pt.green;
+			int b = 0xff & pt.blue;*/
+
+			int pixel = pt >> 4;
+
+			//cout << "pixel:" << pixel;
+
+			if (pixel <= min) {
 				imageOut[y][x] = colorStartRange;
-			} else if (pt > max) {
+			} else if (pixel > max) {
 				imageOut[y][x] = colorEndRange;
 			} else {
-				imageOut[y][x] = ((pt - (center - 0.5))/(width - 1) + 0.5)*(colorEndRange-colorStartRange)+colorStartRange;
+				imageOut[y][x] = ((pixel - (center - 0.5))/(width - 1) + 0.5)*(colorEndRange-colorStartRange)+colorStartRange;
 //				imageOut[y][x] = (pt - center) / width * (colorEndRange - colorStartRange) + colorStartRange;
 
-
 			}
+
+			imageOut[y][x]  = imageOut[y][x] -1024;
+
+
 		}
 	}
 	//printf ("min: %d max: %d /n",minH,maxH);
